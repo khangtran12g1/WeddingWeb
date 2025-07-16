@@ -26,12 +26,6 @@ import { useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef} from "react";
 
-const data = [
-    { id: 1, name: "Sản phẩm A", price: 100000 },
-    { id: 2, name: "Sản phẩm B", price: 150000 },
-    { id: 3, name: "Sản phẩm C", price: 200000 },
-  ];
-
   type Category = {
   id: number;
   name: string;
@@ -269,7 +263,7 @@ export default function Product() {
   formData.append("type", type); 
 
   // Gắn từng ảnh vào
-  images.forEach((file, index) => {
+  images.forEach((file) => {
     formData.append("images", file);
   });
 
@@ -607,7 +601,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả</Label>
                 <Editor
-                    apiKey="h7e10mq3w5ylwea2i2cwdefnjksknfi86dccadw99t4qg3bo"
+                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
                     onInit={(_, editor) => (editorRef1.current = editor)}
                     init={{
                     height: 300,
@@ -630,7 +624,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả chi tiết</Label>
                 <Editor
-                    apiKey="h7e10mq3w5ylwea2i2cwdefnjksknfi86dccadw99t4qg3bo"
+                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
                     onInit={(_, editor) => (editorRef2.current = editor)}
                     init={{
                     height: 500,
@@ -814,7 +808,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả</Label>
                 <Editor
-                    apiKey="h7e10mq3w5ylwea2i2cwdefnjksknfi86dccadw99t4qg3bo"
+                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
                     onInit={(_, editor) => (editEditorRef1.current = editor)}
                     init={{
                     height: 300,
@@ -837,7 +831,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả chi tiết</Label>
                 <Editor
-                    apiKey="h7e10mq3w5ylwea2i2cwdefnjksknfi86dccadw99t4qg3bo"
+                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
                     onInit={(_, editor) => (editEditorRef2.current = editor)}
                     init={{
                     height: 500,
@@ -933,48 +927,69 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button variant={"outline"}>Lọc</Button>
               </div>              
-      <div className="rounded-2xl border border-gray-300 bg-white">
+      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
         <div className="w-full overflow-x-auto p-4">
-          <table className="w-full min-w-[1000px]  border-collapse text-left">
-            <thead className="bg-gray-100 text-gray-700">
+          <table className="w-full min-w-[1000px] border-collapse">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="border-b px-5 py-4">STT</th>
-                <th className="border-b px-5 py-4 w-1/4">Tên sản phẩm</th>
-                <th className="border-b px-5 py-4 text-center">Thuộc</th>
-                <th className="border-b px-5 py-4">Giá</th>
-                <th className="border-b px-5 py-4">Ảnh</th>
-                <th className="border-b px-5 py-4">Loại</th>
-                <th className="border-b px-5 py-4">Action</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Tên sản phẩm</th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Thuộc</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ảnh</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loại</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {filteredProducts.map((item, index) => (
-                <tr key={item.id} className="border-b hover:bg-gray-50">
-                  <td className="px-5 py-4">{index + 1}</td>
-                  <td className="px-5 py-4">{item.name}</td>
-                  <td className="px-5 py-4 ">
-                    <div className="flex flex-col items-center w-full">
-                      <span className="text-base font-medium text-gray-800">
+                <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{item.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex flex-col items-center">
+                      <span className="text-sm font-medium text-gray-800">
                         {item.subcategory.name}
                       </span>
-                      <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700 font-medium">
-                      {item.package?.name ?? "Không thuộc gói"}
-                    </span>
+                      <span className="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {item.package?.name ?? "Không thuộc gói"}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {item.price.toLocaleString("vi-VN")} ₫
                   </td>
-                  <td className="px-5 py-4">
-                    <Button variant={"destructive"} onClick={()=>{setViewImages(item.images);setOpenViewImage(true);}}>Xem ảnh</Button>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50"
+                      onClick={()=>{setViewImages(item.images);setOpenViewImage(true);}}
+                    >
+                      Xem ảnh
+                    </Button>
                   </td>
-                  <td className="px-5 py-4">{item.type}</td>
-                  <td className="px-5 py-4">
-                    <div className="flex gap-2">
-                      <FiEdit size={20} onClick={()=>{setOpenEditProduct(true),setSelectedProduct(item)}} />
-                      <RiDeleteBin6Line size={20} onClick={()=> deleteProduct(item.id)} />
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                      ${item.type === 'single' ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800'}`}>
+                      {item.type}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div className="flex gap-3">
+                      <button 
+                        onClick={()=>{setOpenEditProduct(true),setSelectedProduct(item)}}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        <FiEdit size={18} />
+                      </button>
+                      <button 
+                        onClick={()=> deleteProduct(item.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        <RiDeleteBin6Line size={18} />
+                      </button>
                     </div>
                   </td>
                 </tr>

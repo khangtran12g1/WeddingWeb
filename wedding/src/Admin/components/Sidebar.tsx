@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaChevronUp,FaChevronDown  } from "react-icons/fa6";
+import { MdOutlineDescription } from "react-icons/md";
+import { CiGift } from "react-icons/ci";
+import { AiOutlineProduct } from "react-icons/ai";
+import { ImImages } from "react-icons/im";
+import { FaTruckFast } from "react-icons/fa6";
+import { FaClipboardUser } from "react-icons/fa6";
 
 
 
@@ -13,6 +19,7 @@ interface SidebarProps {
 export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: SidebarProps) {
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen1, setIsOpen1] = useState(false);
 
   return (
     <>
@@ -22,8 +29,8 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
         (isCollapsed ? "w-20 hover:w-64" : "w-64")
       }
     >
-      <div className="px-2 py-8 text-xl font-bold whitespace-nowrap overflow-hidden transition-all ">
-        <span className="text-xl">#</span>
+      <div className="flex gap-2 px-2 py-8 text-xl font-bold whitespace-nowrap overflow-hidden transition-all ">
+        <span><AiOutlineProduct size={25}/></span>
         <span
           className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
               (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
@@ -46,35 +53,67 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
               Dashboard
             </span>
           </li>
-          <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all">
-            <span className="text-xl">📅</span>
+          <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all" onClick={() => setIsOpen1(!isOpen1)}>
+            <span><CiGift size={25}/></span>
             <span
-              className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
+              className={"overflow-hidden whitespace-nowrap transition-all duration-300 flex items-center gap-3 "+
                 (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
             >
-              Calendar
+              Trang Chủ {isOpen1 ? <FaChevronUp size={20}  color="gray"/> : <FaChevronDown size={20} color="gray"/>}
             </span>
           </li>
-          <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all">
-            <span className="text-xl">📊</span>
+            {isOpen1 && (
+              <ul className={"ml-7 space-y-1 transition-all duration-300 " + (isCollapsed ? "w-0 h-0 opacity-0 group-hover:w-auto group-hover:h-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}>
+                  <Link to={"/admin/HomeGioiThieu"}>
+                    <li
+                      className="text-base hover:bg-gray-200 rounded px-2 py-1 cursor-pointer whitespace-nowrap "
+                    >Giới thiệu
+                    </li>
+                  </Link>
+                  <Link to={"/admin/CategoryAdmin"}>
+                    <li
+                      className="text-base hover:bg-gray-200 rounded px-2 py-1 cursor-pointer whitespace-nowrap "
+                    >Lí do
+                    </li>
+                  </Link>
+              </ul>
+            )}
+          <li className="hover:bg-gray-100 cursor-pointer rounded-md transition-all">
+            <Link to={"/admin/AboutAdmin"} className="flex items-center">
+            <span><MdOutlineDescription size={25}/></span>
             <span
               className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
                 (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
             >
-              Dashboard
+              Mô Tả
             </span>
+            </Link>
           </li>
-          <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all">
-            <span className="text-xl">📊</span>
+          
+          <li className="hover:bg-gray-100 cursor-pointer rounded-md transition-all">
+             <Link to={"/admin/GalleryImagesAdmin"} className="flex items-center">
+              <span className="text-xl"><ImImages size={25}/></span>
+              <span
+                className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
+                  (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
+              >
+                Thư Viện Ảnh
+              </span>
+            </Link>
+          </li>
+          <li className="hover:bg-gray-100 cursor-pointer rounded-md transition-all">
+            <Link to={"/admin/OrderListAdmin"} className="flex items-center">
+            <span className="text-xl"><FaTruckFast size={25}/></span>
             <span
               className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
                 (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
             >
-              Dashboard
+              Đơn hàng
             </span>
+            </Link>
           </li>
           <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all" onClick={() => setIsOpen(!isOpen)}>
-            <span className="text-xl">📊</span>
+            <span><CiGift size={25}/></span>
             <span
               className={"overflow-hidden whitespace-nowrap transition-all duration-300 flex items-center gap-3 "+
                 (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
@@ -98,6 +137,17 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
                   </Link>
               </ul>
             )}
+            <li className="hover:bg-gray-100 cursor-pointer rounded-md transition-all">
+            <Link to={"/admin/UserAdmin"} className="flex items-center">
+            <span className="text-xl"><FaClipboardUser size={25}/></span>
+            <span
+              className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
+                (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
+            >
+              Nhân Viên
+            </span>
+            </Link>
+          </li>
       </ul>
     </div>
 

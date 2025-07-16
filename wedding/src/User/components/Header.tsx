@@ -5,30 +5,48 @@ import { useCart } from "./CartContext";
 import {BASE_URL} from "../../../link"
 import axios from "axios";
 
-interface Category {
-  id : number;
-  name : string;
+export interface Package {
+  id: number;
+  subcategory_id : number;
+  name: string;
+  description: string;
 }
+
+export interface SubCategory {
+  id: number;
+  category_id: number;
+  name: string;
+  description: string;
+  image: string;
+  packages : Package[];
+}
+
+export interface CategoryWithSub {
+  id: number;
+  name: string;
+  subcategories: SubCategory[];
+}
+
+
 
 function Header() {
   const [productName, setProductName] = useState("");
-  const { cartItems } = useCart();
-  const [categories, setCategories] = useState<Category[]>([]);
-
+  const { cartItems,removeFromCart,updateQuantity } = useCart();
+  const [categoryWithSub, setCategoryWithSub] = useState<CategoryWithSub[]>([]);
   useEffect(() => {
-      getListCategory();
-    }, []);
-  const getListCategory = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/userHeader/getListCategory`);
-      if (res.data.success) {
-       setCategories(res.data.data); 
-        console.log('Danh sách:', categories);
-      }
-    } catch (err) {
-      console.error('Lỗi khi gọi API:', err);
+    getListCategorySubcategory();
+  }, []);
+  const getListCategorySubcategory = async () => {
+  try {
+    const res = await axios.get(`${BASE_URL}/userHome/getListCategorySubcategory`);
+    if (res.data.success) {
+      setCategoryWithSub(res.data.data);
+      console.log("Danh sách:", res.data.data);
     }
-  };
+  } catch (err) {
+    console.error("Lỗi khi gọi API:", err);
+  }
+};
   return (
     
     <header className=" flex flex-col shadow-lg mb-2 font-timesnewroman">
@@ -64,9 +82,59 @@ function Header() {
               </div>
             </div>
 
-            <div className="text-xl">
-              <span >🛒</span>
-              <span>{cartItems.length}</span>
+            <div className="relative group inline-block">
+                <Link to={"/Cart"}>
+                <div className="text-xl cursor-pointer">
+                  <span>🛒</span>
+                  <span>{cartItems.length}</span>
+                </div>
+              </Link>
+
+              {/* Dropdown hiện khi hover */}
+              <div className="absolute right-0 w-64 bg-white shadow-lg border border-gray-200 rounded-lg p-2 hidden group-hover:block z-50">
+                {cartItems.length === 0 ? (
+                  <div className="text-center text-gray-500">Giỏ hàng trống</div>
+                ) : (
+                  <ul className="space-y-2 max-h-60 overflow-y-auto">
+                    {cartItems.map((item) => (
+                      <li key={item.id} className="flex items-center gap-2 border-b pb-1">
+                        <img src={item.img} className="w-10 h-10 object-cover rounded" />
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold">{item.name}</p>
+                          <p className="text-xs text-gray-600">
+                            SL: {item.quantity} x {item.price.toLocaleString()}đ
+                          </p>
+
+                          {/* Nút điều chỉnh số lượng */}
+                          <div className="flex items-center gap-2 mt-1">
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              className="px-2 py-0.5 border rounded hover:bg-gray-200"
+                              disabled={item.quantity <= 1}
+                            >-</button>
+
+                            <span>{item.quantity}</span>
+
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              className="px-2 py-0.5 border rounded hover:bg-gray-200"
+                            >+</button>
+
+                            {/* Nút xoá */}
+                            <button
+                              onClick={() => removeFromCart(item.id)}
+                              className="ml-auto text-red-500 text-sm hover:underline"
+                            >
+                              Xoá
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+
+                )}
+              </div>
             </div>
             
           </div>
@@ -83,9 +151,11 @@ function Header() {
                 </svg>
               </div>
               <ul className="absolute left-0 top-full z-50 hidden whitespace-nowrap border bg-[#f1e256] shadow-md group-hover:block px-5">
-                {categories.map((cat)=> (
-                  <li key={cat.id}><Link to={"/DanhSachSanPham"} className="block px-4 py-2 hover:text-gray-100">{cat.name}</Link><div className=" border-t border-white"></div></li>
-                ))}
+                {categoryWithSub.map((cat)=> {
+                  const firstSub = cat.subcategories?.[0];
+                  return(
+                  <li key={cat.id}><Link to={`/DanhSachSanPham?subcategoryId=${firstSub?.id}&categoryId=${cat.id}`} className="block px-4 py-2 hover:text-gray-100">{cat.name}</Link><div className=" border-t border-white"></div></li>
+                )})}
               </ul>
             </div>
             <Link to="/GioiThieu" className="text-lg hover:text-pink-600 font-bold">

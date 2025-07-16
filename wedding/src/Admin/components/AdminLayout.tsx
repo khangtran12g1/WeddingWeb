@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 
 export default function LayoutAdmin() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -9,6 +10,7 @@ export default function LayoutAdmin() {
 
   return (
     <div className="flex min-h-screen">
+      <Toaster />
       <div className="sticky top-0 h-screen overflow-y-auto bg-white shadow-md">
         <Sidebar
           isCollapsed={isCollapsed}
@@ -16,16 +18,21 @@ export default function LayoutAdmin() {
           closeMobileSidebar={() => setIsMobileOpen(false)}
         />
       </div>
-      <div className="flex-1 flex flex-col">
-        <div className="sticky top-0 bg-white shadow-md">
-        <Header
-          toggleSidebar={() => setIsCollapsed(!isCollapsed)}
-          toggleMobileSidebar={() => setIsMobileOpen(true)}
-        />
+      <div className="flex-1 flex flex-col overflow-hidden h-screen">
+        {/* Header sticky luôn hiển thị */}
+        <div className="sticky top-0 bg-white shadow-md z-10">
+          <Header
+            toggleSidebar={() => setIsCollapsed(!isCollapsed)}
+            toggleMobileSidebar={() => setIsMobileOpen(true)}
+          />
         </div>
-        <main className="p-4 bg-gray-100 flex-1 overflow-auto max-w-full">
-          <Outlet />
-        </main>
+
+        {/* Nội dung scroll bên dưới */}
+        <div className="flex-1 overflow-y-auto bg-gray-100">
+          <main className="p-4 max-w-full">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );

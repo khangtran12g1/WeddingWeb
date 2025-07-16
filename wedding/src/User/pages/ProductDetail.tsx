@@ -1,9 +1,7 @@
-import sss from "../image/DSC04213.jpg";
 import cnhu from "../image/cnhu.jpg";
 import atrieu from "../image/atrieu.jpg";
-import xehoa from "../image/xehoa.jpg";
-import bequa from "../image/bequa.jpg";
-import bangan from "../image/bangan.jpg";
+import { useCart } from "../components/CartContext";
+
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Thumbs, FreeMode, Navigation } from 'swiper/modules';
@@ -14,19 +12,58 @@ import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation'
 
-import { Editor } from "@tinymce/tinymce-react";
-import { useRef} from "react";
-
-const images = [
-  xehoa,
-  sss,
-  bequa,
-  bangan,
-  sss,xehoa
-];
-
+import { useEffect} from "react";
+import {BASE_URL} from "../../../link"
 import { useState } from "react";
-function Product() {
+import { Link, useParams } from "react-router-dom";
+import axios from 'axios';
+
+export interface ProductImage {
+  id: number;
+  product_id: number;
+  image_url: string;
+}
+
+export interface ProductDetail {
+  id: number;
+  subcategory_id: number;
+  subcategory_name: string;
+  category_id: number;
+  category_name: string;
+  package_id: number;
+  name: string;
+  short_description: string;
+  full_description: string;
+  price: number;
+  type: string;
+  images: ProductImage[];
+}
+
+function ProductDetail() {
+//{ them vao gio hang
+    const { addToCart } = useCart();
+    
+    const [productDetail, setProductDetail] = useState<ProductDetail | null>(null);
+    const { id } = useParams();
+    const getProductDetailById = async (id: string): Promise<ProductDetail | null> => {
+        try {
+            const res = await axios.get(`${BASE_URL}/userProductDetail/productDetail/${id}/details`);
+            if (res.data.success) {
+            setProductDetail(res.data.data);
+            }
+            return null;
+        } catch (err) {
+            console.error("Lỗi khi gọi API chi tiết sản phẩm:", err);
+            return null;
+        }
+    };
+    useEffect(() => {
+        if (id) {
+            getProductDetailById(id);
+        }
+    }, [id]);
+
+
     const [phone, setPhone] = useState("");
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const [quantity, setQuantity] = useState(1);
@@ -34,24 +71,13 @@ function Product() {
     const increase = () => setQuantity((q) => q + 1);
     const decrease = () => setQuantity((q) => Math.max(1, q - 1));
 
-    const editorRef = useRef<any>(null);
-    const [savedContent, setSavedContent] = useState("");
-    
-    const handleSave = () => {
-        if (editorRef.current) {
-          const content = editorRef.current.getContent();
-          setSavedContent(content);
-        }
-      };
-
-
   return (
     <>
       <div className="my-8 bg-white md:mx-24">
         <div className="flex gap-2 [&>h2]:text-gray-400 [&>h2]:text-lg mb-4 px-4" >
-          <h2>Trang Chủ</h2>
+          <h2>TRANG CHỦ</h2>
           <h2>/</h2>
-          <h2>Trang Trí Cưới Hỏi</h2>
+          <h2>{productDetail?.subcategory_name}</h2>
         </div>
         <div className="md: grid grid-cols-1 md:grid-cols-2">
         {/* Phần ảnh */}
@@ -64,10 +90,10 @@ function Product() {
                 modules={[Navigation, Thumbs]}
                 className="mb-4"
             >
-                {images.map((img, i) => (
-                <SwiperSlide key={i}>
+                {productDetail?.images.map((img) => (
+                <SwiperSlide key={img.id}>
                     <div className="w-full aspect-[16/11]">
-                        <img src={img} alt={`img-${i}`} className="w-full h-full object-cover" />
+                        <img src={img.image_url} alt={`img-${img.id}`} className="w-full h-full object-cover" />
                     </div>
                 </SwiperSlide>
                 ))}
@@ -83,9 +109,9 @@ function Product() {
                         slideToClickedSlide={true} 
                         modules={[FreeMode, Thumbs]}
                     >
-                        {images.map((img, i) => (
-                        <SwiperSlide key={i} className="!w-[100px]">
-                            <img src={img} alt={`thumb-${i}`} className=" aspect-video object-cover" />
+                        {productDetail?.images.map((img) => (
+                        <SwiperSlide key={img.id} className="!w-[100px]">
+                            <img src={img.image_url} alt={`thumb-${img.id}`} className="cursor-pointer aspect-video object-cover" />
                         </SwiperSlide>
                         ))}
                     </Swiper>
@@ -93,10 +119,10 @@ function Product() {
             </div>
             {/* Bên phải phần ảnh */}
           <div className="px-4 flex flex-col gap-4">
-            <h2 className="text-3xl  font-medium">Trang Trí Gia Tiên Màu Trắng Xanh Mint Tiffany – Không Gian Cưới Tinh Tế, Đẳng Cấp</h2>
+            <h2 className="text-3xl  font-medium">{productDetail?.name}</h2>
             <div className="flex text-2xl  font-medium">
                 <h2 >Giá:&nbsp;</h2>
-                <h2 className=" text-red-600">4.800.000 đ</h2>
+                <h2 className=" text-red-600">{productDetail?.price} đ</h2>
             </div>
             <div className="flex flex-col [&>h2]:text-lg font-medium gap-3">
                 <h2>CÁC TONE MÀU HIỆN CÓ:</h2>
@@ -111,7 +137,10 @@ function Product() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col [&>h2]:text-lg font-medium gap-3">
+            <div className="flex flex-col editor-output-category font-timesnewroman gap-4" 
+                dangerouslySetInnerHTML={{ __html: productDetail?.short_description ||"" }}>
+            </div>
+            {/* <div className="flex flex-col [&>h2]:text-lg font-medium gap-3">
                 <h2>DANH MỤC BAO GỒM:</h2>
                 <ul className="list-decimal list-inside space-y-1 text-gray-700 text-lg font-timesnewroman">
                     <li>Trang trí cổng hoa lụa cao cấp</li>
@@ -132,7 +161,7 @@ function Product() {
                     <li><span className="text-red-500">Tặng:&nbsp;</span>10 bông cài áo</li>
                     <li><span className="text-red-500">Tặng:&nbsp;</span>2 đĩa 3 tần cao cấp</li>
                 </ul>
-            </div>
+            </div> */}
             <hr/>
             <p className="text-lg font-timesnewroman">Hãy để Cưới Hỏi Phu Thê có cơ hội được phục vụ bạn</p>
             <div className="flex items-center gap-7">
@@ -186,7 +215,13 @@ function Product() {
                     onClick={increase}
                     className="w-10 h-10 rounded bg-gray-200 text-xl hover:bg-gray-300"> + </button>
 
-                <button
+                <button onClick={()=>addToCart({
+                    id: productDetail?.id ?? 0,
+                    name: productDetail?.name ?? "Không tên",
+                    price: productDetail?.price ?? 0,
+                    img: productDetail?.images?.[0].image_url ?? "",
+                    quantity:quantity
+                })}
                     className="flex items-center gap-2 py-2 px-4 bg-red-600 text-white rounded hover:bg-red-700 ml-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -201,6 +236,13 @@ function Product() {
                 </button>
 
                 <button
+                    onClick={()=>addToCart({
+                        id: productDetail?.id ?? 0,
+                        name: productDetail?.name ?? "Không tên",
+                        price: productDetail?.price ?? 0,
+                        img: productDetail?.images?.[0].image_url ?? "",
+                        quantity:quantity
+                    })}
                     className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-700 ml-4"
                     >
                     <svg
@@ -210,7 +252,9 @@ function Product() {
                         >
                         <path d="M13 2L3 14h7v8l10-12h-7z" />
                     </svg>
+                    <Link to={"/Order"}>
                     Đặt ngay
+                    </Link>
                 </button>
 
             </div>
@@ -238,7 +282,10 @@ function Product() {
                     />
                 </svg>
             </div>
-            <h2 className="text-[1.6em] flex items-center font-bold gap-2">
+            <div className="flex flex-col editor-output-describe font-timesnewroman gap-4" 
+                dangerouslySetInnerHTML={{ __html: productDetail?.full_description ||"" }}>
+            </div>
+            {/* <h2 className="text-[1.6em] flex items-center font-bold gap-2">
                 <img draggable="false" className="w-[1em] h-[1em]" src="https://s.w.org/images/core/emoji/15.1.0/svg/1f4cc.svg"/>
                 Dịch Vụ Trang Trí Gia Tiên Đám Cưới Tại Nhà – Phu Thê Wedding
             </h2>
@@ -280,56 +327,24 @@ function Product() {
                 <li><p>Thay đổi màu sắc, kiểu dáng cổng hoa, bàn thờ.</p></li>
                 <li><p>Trang trí thêm rạp cưới, sân khấu, bàn gallery, cầu thang, lối đi.</p></li>
                 <li><p>Nhận thi công trọn gói tại nhà đúng chuẩn lễ nghi truyền thống.</p></li>
-            </ul>
+            </ul> */}
             <p><img className="w-[1em] h-[1em] float-left mr-1 mt-1" src="https://s.w.org/images/core/emoji/15.1.0/svg/1f699.svg"/> Chúng tôi chuyên cung cấp dịch vụ cưới hỏi trọn gói tại TP.HCM, sẵn sàng phục vụ tất cả các quận như: Quận 1, Quận 3, Quận 5, Quận 7, Quận 10, Bình Thạnh, Gò Vấp, Tân Bình, Tân Phú, Phú Nhuận, Thủ Đức, Bình Tân, Hóc Môn, Nhà Bè, Quận 12, và các khu vực lân cận.</p>
             <p>Dù bạn ở trung tâm hay vùng ven, đội ngũ của chúng tôi luôn sẵn sàng hỗ trợ tận nơi, đảm bảo uy tín – chuyên nghiệp – đúng giờ.</p>
         </div>
-        {/* Ảnh mô tả */}
         
-        {/* <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center">
             <h2 className="text-2xl font-bold font-timesnewroman m-5">Hình ảnh thực tế tại Phuthewedding</h2>
-             {images.map((image,index)=>(
-                <div key={index} className="w-full h-full  aspect-[16/9] my-3 xl:w-9/12 ">
-                    <img src={image} alt={"img "+ {index}} className=" w-full h-full object-cover border rounded-3xl"/>
+             {productDetail?.images.map((image)=>(
+                <div key={image.id} className="w-full h-full  aspect-[16/9] my-3 xl:w-9/12 ">
+                    <img src={image.image_url} alt={`img ${image.id}`} className=" w-full h-full object-cover border rounded-3xl"/>
                 </div>
              ))}              
-        </div> */}
+        </div>
         
-        {/* test editor */}
-        <div className="flex flex-col editor-output-describe font-timesnewroman gap-4" dangerouslySetInnerHTML={{ __html: savedContent }}>
-        </div>
-        <div className="max-w-4xl">
-            <Editor
-                apiKey="h7e10mq3w5ylwea2i2cwdefnjksknfi86dccadw99t4qg3bo"
-                onInit={(_, editor) => (editorRef.current = editor)}
-                init={{
-                height: 500,
-                plugins: [
-                    // Core plugins
-                    "anchor", "autolink", "charmap", "codesample", "emoticons", "image", "link", "lists", "media", "searchreplace", "table", "visualblocks", "wordcount",
-                    "checklist", "mediaembed", "casechange", "formatpainter", "pageembed", "a11ychecker", "tinymcespellchecker", "permanentpen", "powerpaste", "advtable", "advcode", "editimage", "advtemplate", "mentions", "tinycomments", "tableofcontents", "footnotes", "mergetags", "autocorrect", "typography", "inlinecss", "markdown", "importword", "exportword", "exportpdf"
-                ],
-                toolbar:
-                    "undo redo | blocks fontfamily fontsize | bold italic underline emoticons numlist bullist image hr| link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | indent outdent | charmap | removeformat",
-                tinycomments_mode: "embedded",
-                tinycomments_author: "Author name",
-                mergetags_list: [
-                    { value: "First.Name", title: "First Name" },
-                    { value: "Email", title: "Email" },
-                    ],
-                    }}
-            />
-            <button
-                onClick={handleSave}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-            Lưu nội dung
-        </button>
-        </div>
 
       </div>
       
     </>
   );
 }
-export default Product;
+export default ProductDetail;

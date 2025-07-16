@@ -1,18 +1,7 @@
 import gioithieu from "../image/gioithieu (2).jpg";
 import anhgioithieu from "../image/anhgioithieu.png";
 import camket from "../image/camket.png";
-import sangtao from "../image/sangtao.png";
-import tantuy from "../image/tantuy.png";
 import shadow from "../image/bg-shadowgt.png";
-import category_trangtri from "../image/category_trangtricuoihoi.jpg";
-import mamqua from "../image/mamquacuoihoi.jpg";
-import levat from "../image/levatdamngo.jpg";
-import conghoa from "../image/conghoacuoihoi.jpg";
-import khungrap from "../image/khủngapcuoihoi.jpg";
-import longphungtraicay from "../image/longphungtraicay.jpg";
-import xehoa from "../image/xehoa.jpg";
-import bequa from "../image/bequa.jpg";
-import bangan from "../image/bangan.jpg";
 import {BASE_URL} from "../../../link"
 import axios from "axios";
 
@@ -20,6 +9,14 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+export interface Package {
+  id: number;
+  subcategory_id : number;
+  name: string;
+  description: string;
+}
 
 export interface SubCategory {
   id: number;
@@ -27,12 +24,19 @@ export interface SubCategory {
   name: string;
   description: string;
   image: string;
+  packages : Package[];
 }
 
 export interface CategoryWithSub {
   id: number;
   name: string;
   subcategories: SubCategory[];
+}
+
+export interface Gioi_Thieu {
+  id: number;
+  content: string;
+  image_url: string;
 }
 
 
@@ -44,6 +48,7 @@ function Home() {
   const [categoryWithSub, setCategoryWithSub] = useState<CategoryWithSub[]>([]);
   useEffect(() => {
     getListCategorySubcategory();
+    fetchAbout();
   }, []);
   const getListCategorySubcategory = async () => {
   try {
@@ -56,6 +61,19 @@ function Home() {
     console.error("Lỗi khi gọi API:", err);
   }
 };
+  const [gioithieu,setGioiThieu] = useState<Gioi_Thieu | null>(null);
+  const fetchAbout = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/homeUser/get`);
+        if (res.data.success) {
+            setGioiThieu(res.data.data);
+        } else {
+          console.error(res.data.message || "Không tìm thấy nội dung");
+        }
+      } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+      }
+    };
 
   
   return (
@@ -87,9 +105,9 @@ function Home() {
 
     {/* gioi thieu */}
       <div data-aos="fade-right" data-aos-offset="0" className="flex">
-        <img src={gioithieu} className="w-1/2 hidden md:block object-cover" />
+        <img src={gioithieu?.image_url} className="w-1/2 hidden md:block object-cover" />
         <div className="flex-1 bg-[#d8f1f9ee] px-3 pt-3">
-          <div className="flex justify-center font-serif text-2xl font-bold text-red-600">
+          <div className="flex justify-center font-timesnewroman text-2xl font-bold text-red-600">
             GIỚI THIỆU VỀ PHU THUÊ WEDDING
           </div>
           <div className="flex items-center justify-center">
@@ -97,41 +115,8 @@ function Home() {
             <img src={anhgioithieu} />
             <div className="flex-grow border-t border-gray-400"></div>
           </div>
-          <p className="font-sans text-lg">
-            Các bạn chỉ cần Hạnh Phúc – đám cưới Long Lanh cứ để Phu Thê lo!
-          </p>
-          <p className="my-3 font-sans text-lg">
-            Chúng tôi chuyên cung cấp dịch vụ cưới hỏi trọn gói tại TP.HCM, sẵn
-            sàng phục vụ tất cả các quận như: Quận 1, Quận 3, Quận 5, Quận 7,
-            Quận 10, Bình Thạnh, Gò Vấp, Tân Bình, Tân Phú, Phú Nhuận, Thủ Đức,
-            Bình Tân, Hóc Môn, Nhà Bè, Quận 12, và các khu vực lân cận.
-          </p>
-          <p className="my-3 font-sans text-lg">
-            Dù bạn ở trung tâm hay vùng ven, đội ngũ của chúng tôi luôn sẵn sàng
-            hỗ trợ tận nơi, đảm bảo uy tín – chuyên nghiệp – đúng giờ.
-          </p>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-3">
-              <img src={camket} className="w-14" />
-              <p className="my-3 font-sans text-lg">
-                Cưới Hỏi PHU THÊ- Cung cấp các mâm quả, lễ vật dạm ngõ đa dạng
-                phục vụ mọi nhu cầu
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <img src={sangtao} className="w-14" />
-              <p className="my-3 font-sans text-lg">
-                Cưới hỏi PhuThê luôn đặt Uy tín – Chất lượng và phát triển
-                thương hiệu lên hàng đầu
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <img src={tantuy} className="w-14" />
-              <p className="my-3 font-sans text-lg">
-                Tại Cưới Hỏi PhuThê luôn mang đến nhiều giải pháp toàn diện cho
-                kế hoạch cưới hoàn hảo của bạn và hàng chục ngàn khách hàng
-              </p>
-            </div>
+
+          <div className="editor-output-HomeGT" dangerouslySetInnerHTML={{ __html: gioithieu?.content||"" }}>
           </div>
         </div>
       </div>
@@ -148,93 +133,19 @@ function Home() {
           <h2 data-aos="fade-up" className="text-center text-3xl font-bold font-timesnewroman py-4">{cat.name}</h2>
           <div className="grid w-11/12 mx-auto grid-cols-1 gap-5 px-10 sm:grid-cols-2 md:grid-cols-3 font-timesnewroman">
           {cat.subcategories.map((sub)=> (
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4" key={sub.id}>
-              <img className="w-full rounded-full border-4 border-yellow-300" src={sub.image} />
-              <h2 className="text-lg font-bold hover:text-red-600"> {sub.name} </h2>
-            </div>
+            <Link to={`/DanhSachSanPham?subcategoryId=${sub.id}&categoryId=${cat.id}`}>
+              <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4" key={sub.id}>
+                <img className="w-full rounded-full border-4 border-yellow-300" src={sub.image} />
+                <h2 className="text-lg font-bold hover:text-red-600"> {sub.name} </h2>
+              </div>
+             </Link>
           ))}
           </div>
         </div>
         <hr className="my-6 border-t border-gray-300 w-2/3 mx-auto" />
         </>
         ))}
-        {/* <div className="flex flex-col">
-          <h2 data-aos="fade-up" className="text-center text-3xl font-bold font-timesnewroman py-4">Dịch Vụ Cưới Hỏi</h2>
-          <div className="grid w-11/12 mx-auto grid-cols-1 gap-5 px-10 sm:grid-cols-2 md:grid-cols-3 font-timesnewroman">
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={category_trangtri} />
-              <h2 className="text-lg font-bold hover:text-red-600"> TRANG TRÍ CƯỚI HỎI </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={mamqua} />
-              <h2 className="text-lg font-bold hover:text-red-600"> MÂM QUẢ CƯỚI HỎI </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={levat} />
-              <h2 className="text-lg font-bold hover:text-red-600"> LỄ VẬT DẠM NGÕ </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={conghoa} />
-              <h2 className="text-lg font-bold hover:text-red-600"> CỔNG HOA CƯỚI HỎI </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={khungrap} />
-              <h2 className="text-lg font-bold hover:text-red-600"> KHUNG RẠP CƯỚI HỎI </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={longphungtraicay} />
-              <h2 className="text-lg font-bold hover:text-red-600"> LONG PHỤNG – TRÁI CÂY </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={xehoa} />
-              <h2 className="text-lg font-bold hover:text-red-600"> XE HOA – TRANG TRÍ XE HOA </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={bequa} />
-              <h2 className="text-lg font-bold hover:text-red-600"> BÊ QUẢ CƯỚI HỎI </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src={bangan} />
-              <h2 className="text-lg font-bold hover:text-red-600"> BACKGOUND – BÀN GALLERY </h2>
-            </div>
-          </div>
-        </div>
-        <hr className="my-6 border-t border-gray-300 w-2/3 mx-auto" />
-        <div className="flex flex-col">
-          <h2 data-aos="fade-up" className="text-center text-3xl font-bold font-timesnewroman py-4">Dịch Vụ Thuê Đồ</h2>
-          <div className="grid w-11/12 mx-auto grid-cols-1 gap-5 px-10 sm:grid-cols-2 md:grid-cols-3 font-timesnewroman">
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full rounded-full border-4 border-yellow-300" src="/img/aodai.jpg" />
-              <h2 className="text-lg font-bold hover:text-red-600"> THUÊ ÁO DÀI </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full aspect-[16/11] object-cover rounded-full border-4 border-yellow-300" src="/img/dovannghe.jpg" />
-              <h2 className="text-lg font-bold hover:text-red-600"> THUÊ ĐỒ VĂN NGHỆ </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full aspect-[16/11] rounded-full border-4 border-yellow-300" src="/img/docungdinh.jpg" />
-              <h2 className="text-lg font-bold hover:text-red-600"> THUÊ ĐỒ CUNG ĐÌNH </h2>
-            </div>
-          </div>
-        </div>
-        <hr className="my-6 border-t border-gray-300 w-2/3 mx-auto" />
-        <div className="flex flex-col">
-          <h2 data-aos="fade-up" className="text-center text-3xl font-bold font-timesnewroman py-4">Dịch Vụ Chụp Hình</h2>
-          <div className="grid w-11/12 mx-auto grid-cols-1 gap-5 px-10 sm:grid-cols-2 md:grid-cols-3 font-timesnewroman">
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full aspect-[16/11] rounded-full border-4 border-yellow-300" src="/img/chuphinhgiadinh.jpg" />
-              <h2 className="text-lg font-bold hover:text-red-600"> CHỤP HÌNH GIA ĐÌNH </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full aspect-[16/11] rounded-full border-4 border-yellow-300" src="/img/chupkyyeu.jpg" />
-              <h2 className="text-lg font-bold hover:text-red-600"> CHỤP HÌNH KỶ YẾU </h2>
-            </div>
-            <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4">
-              <img className="w-full aspect-[16/11] rounded-full border-4 border-yellow-300" src="/img/chupanhconpect.jpg" />
-              <h2 className="text-lg font-bold hover:text-red-600"> CHỤP ẢNH CONCEPT  </h2>
-            </div>
-          </div>
-        </div> */}
+        
       </div>
     {/* vi sao */}
       <div className="mt-5 flex flex-col bg-slate-200 pt-5">

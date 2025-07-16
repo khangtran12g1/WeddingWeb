@@ -104,6 +104,22 @@
     
     background-image: url('/check.svg');
   }
+
+
+  .editor-output-HomeGT h1,
+  .editor-output-HomeGT h2,
+  .editor-output-HomeGT h3,
+  .editor-output-HomeGT h4,
+  .editor-output-HomeGT h5{
+    @apply flex items-center gap-3 my-3 font-timesnewroman text-xl
+  }
+  .editor-output-HomeGT p{
+    @apply my-3 font-timesnewroman text-xl
+  }
+  .editor-output-HomeGT img{
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
  
 }
 

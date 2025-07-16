@@ -43,7 +43,6 @@ type Package = {
   subcategory_name: string;
 };
 export default function Category() {
-  
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubCategories] = useState<SubCategory[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
