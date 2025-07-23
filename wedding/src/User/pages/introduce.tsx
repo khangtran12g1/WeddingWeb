@@ -11,9 +11,7 @@ function Introduce (){
             const res = await axios.get(`${BASE_URL}/about/get`);
             if (res.data.success) {
                 const aboutContent = res.data.data.content;
-                setTimeout(() => {
                     setContent(aboutContent || "");
-                }, 1000);
             } else {
             toast.error(res.data.message || "Không tìm thấy nội dung");
             }

@@ -13,6 +13,8 @@ const schema = `
   DROP TABLE IF EXISTS gallery_images;
   DROP TABLE IF EXISTS users;
   DROP TABLE IF EXISTS gioi_thieu;
+  DROP TABLE IF EXISTS ly_do;
+  DROP TABLE IF EXISTS video;
 
   CREATE TABLE categories (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -113,8 +115,18 @@ CREATE TABLE gioi_thieu (
     image_url VARCHAR(255)
 );
 
+CREATE TABLE ly_do (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tieu_de VARCHAR(255) NOT NULL,
+    mo_ta TEXT NOT NULL,
+    icon_url VARCHAR(255)
+);
 
-
+CREATE TABLE video (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mo_ta TEXT NOT NULL,
+    video_url VARCHAR(255)
+);
 
 `;
 

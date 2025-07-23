@@ -111,14 +111,29 @@
   .editor-output-HomeGT h3,
   .editor-output-HomeGT h4,
   .editor-output-HomeGT h5{
-    @apply flex items-center gap-3 my-3 font-timesnewroman text-xl
+    @apply flex items-center gap-3 my-3 font-timesnewroman text-base lg:text-xl
   }
   .editor-output-HomeGT p{
-    @apply my-3 font-timesnewroman text-xl
+    @apply my-3 font-timesnewroman text-base lg:text-xl
   }
   .editor-output-HomeGT img{
     width: 3.5rem !important;
     height: 3.5rem !important;
+  }
+
+
+  .editor-output-HomeVideo h2,
+  .editor-output-HomeVideo h3{
+    @apply mb-2 text-xl md:text-4xl
+  }
+
+  .editor-output-HomeVideo h4,
+  .editor-output-HomeVideo h5{
+    @apply text-lg font-light md:text-3xl
+  }
+
+  .editor-output-HomeVideo p{
+    @apply text-base font-light md:text-2xl
   }
  
 }

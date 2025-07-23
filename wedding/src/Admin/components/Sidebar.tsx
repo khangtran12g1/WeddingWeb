@@ -7,6 +7,8 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { ImImages } from "react-icons/im";
 import { FaTruckFast } from "react-icons/fa6";
 import { FaClipboardUser } from "react-icons/fa6";
+import { BsMenuButtonWide } from "react-icons/bs";
+import { AiFillDashboard } from "react-icons/ai";
 
 
 
@@ -45,7 +47,7 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
 
       <ul className="space-y-2 font-timesnewroman [&>li]:p-2 [&>li]:text-lg">
           <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all">
-            <span className="text-xl">📊</span>
+            <span className="text-xl"><AiFillDashboard size={25}/></span>
             <span
               className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
                 (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
@@ -54,7 +56,7 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
             </span>
           </li>
           <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all" onClick={() => setIsOpen1(!isOpen1)}>
-            <span><CiGift size={25}/></span>
+            <span><BsMenuButtonWide size={25}/></span>
             <span
               className={"overflow-hidden whitespace-nowrap transition-all duration-300 flex items-center gap-3 "+
                 (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
@@ -70,10 +72,16 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
                     >Giới thiệu
                     </li>
                   </Link>
-                  <Link to={"/admin/CategoryAdmin"}>
+                  <Link to={"/admin/HomeLiDo"}>
                     <li
                       className="text-base hover:bg-gray-200 rounded px-2 py-1 cursor-pointer whitespace-nowrap "
                     >Lí do
+                    </li>
+                  </Link>
+                  <Link to={"/admin/HomeVideo"}>
+                    <li
+                      className="text-base hover:bg-gray-200 rounded px-2 py-1 cursor-pointer whitespace-nowrap "
+                    >Video
                     </li>
                   </Link>
               </ul>

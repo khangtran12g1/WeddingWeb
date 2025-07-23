@@ -1,4 +1,3 @@
-import gioithieu from "../image/gioithieu (2).jpg";
 import anhgioithieu from "../image/anhgioithieu.png";
 import camket from "../image/camket.png";
 import shadow from "../image/bg-shadowgt.png";
@@ -39,6 +38,20 @@ export interface Gioi_Thieu {
   image_url: string;
 }
 
+export interface LiDo {
+  id: number;
+  title: string;
+  content: string;
+  image_url: string;
+}
+
+
+export interface Video {
+  id: number;
+  mo_ta: string;
+  video_url: string;
+}
+
 
 function Home() {
   useEffect(() => {
@@ -49,6 +62,8 @@ function Home() {
   useEffect(() => {
     getListCategorySubcategory();
     fetchAbout();
+    fetchLiDo();
+    fetchVideo();
   }, []);
   const getListCategorySubcategory = async () => {
   try {
@@ -75,32 +90,61 @@ function Home() {
       }
     };
 
+    const [liDoList, setLiDoList] = useState<LiDo[]>([]);
+    const fetchLiDo = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/homeUser/getLido`);
+        setLiDoList(res.data);
+      } catch (err) {
+        console.error("Lỗi tải danh sách lý do");
+      }
+    };
+    const isExactly4 = liDoList.length === 4;
+    const isMoreThan4 = liDoList.length > 4;
+
+    const containerClass = `mx-auto mb-6 grid gap-6 ${
+      isExactly4
+        ? 'w-3/4 grid-cols-2'
+        : isMoreThan4
+        ? 'w-11/12 grid-cols-1 md:grid-cols-3'
+        : 'w-3/4 grid-cols-1 sm:grid-cols-2'
+    }`;
+
+    const [video,setVideo] = useState<Video | null>(null);
+     const fetchVideo = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/homeUser/getVideo`);
+        if (res.data.success) {
+            setVideo(res.data.data);
+        } else {
+          console.error(res.data.message || "Không tìm thấy nội dung");
+        }
+      } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+        console.error("Lỗi máy chủ");
+      }
+    };
   
   return (
     <>
     {/* video */}
       <div className="relative">
-        <video
-          playsInline
-          autoPlay
-          loop
-          muted
-          className="w-full rounded-lg object-cover brightness-50 h-[250px] md:h-[450px] xl:h-[578px]"
-          // style={{ height: 578 }}
-        >
-          <source src="https://phuthewedding.com/wp-content/uploads/2023/05/Untitled-Project.mp4" />
-        </video>
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-white gap-10">
-          <h2 className="mb-2 text-3xl font-bold md:text-4xl">
-            CƯỚI HỎI PHU THÊ
-          </h2>
-          <p className="text-lg font-light md:text-2xl">
-            Dịch vụ cưới hỏi trọn gói cao cấp
-          </p>
-          <p className="text-lg font-light md:text-3xl">
-            Chuyên Trang Trí Gia Tiên, Mâm Qủa Cưới Hỏi, Tráp Dạm Ngỏ….
-          </p>
-        </div>
+        {video?.video_url && (
+            <video
+              playsInline
+              autoPlay
+              loop
+              muted
+              className="w-full rounded-lg object-cover brightness-50 h-[250px] md:h-[450px] xl:h-[578px]"
+              // style={{ height: 578 }}
+            >
+            {/* <source src="https://phuthewedding.com/wp-content/uploads/2023/05/Untitled-Project.mp4" /> */}
+              <source src={video?.video_url} />
+            </video>
+        )}
+        
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-white gap-10 editor-output-HomeVideo" dangerouslySetInnerHTML={{ __html: video?.mo_ta||"" }}>
+          </div>
       </div>
 
     {/* gioi thieu */}
@@ -159,48 +203,24 @@ function Home() {
           <div className="w-1/12 border-t border-gray-400"></div>
         </div>
 
-        <div className="mx-auto mb-6 grid w-2/3 grid-cols-1 gap-6 md:grid-cols-2">
-          <div data-aos="fade-right" className="flex items-start gap-3">
-            <img src={camket} className="h-14 w-14 object-contain" />
-            <div className="flex flex-col rounded-3xl border-2 border-red-500 px-4 py-2">
-              <h2 className="text-xl font-bold">CHUYÊN NGHIỆP TỪNG KHÂU</h2>
-              <p>
-                Đội ngũ nhân viên trang trí tay nghề cao, khả năng “biến hóa”
-                đỉnh cao, luôn cập nhật những xu hướng trang trí mới nhất sẽ
-                giúp cô dâu và chú rể yên tâm.
-              </p>
+        <div className={containerClass}>
+          {liDoList.map((item) => (
+            <div
+              key={item.id}
+              data-aos="fade-right"
+              className="flex items-start gap-3"
+            >
+              <img
+                src={item.image_url ? item.image_url : camket}
+                alt="icon"
+                className="h-14 w-14 object-contain"
+              />
+              <div className="flex flex-col rounded-3xl border-2 border-red-500 px-4 py-2">
+                <h2 className="text-xl font-bold">{item.title}</h2>
+                <p>{item.content}</p>
+              </div>
             </div>
-          </div>
-          <div data-aos="fade-right" className="flex items-start gap-3">
-            <img src={camket} className="h-14 w-14 object-contain" />
-            <div className="flex flex-col rounded-3xl border-2 border-red-500 px-4 py-2">
-              <h2 className="text-xl font-bold">TRANG TRÍ SÁNG TẠO</h2>
-              <p>
-                Không gian tiệc cưới được thiết kế theo yêu cầu, sáng tạo theo
-                phong cách riêng.
-              </p>
-            </div>
-          </div>
-          <div data-aos="fade-right" className="flex items-start gap-3">
-            <img src={camket} className="h-14 w-14 object-contain" />
-            <div className="flex flex-col rounded-3xl border-2 border-red-500 px-4 py-2">
-              <h2 className="text-xl font-bold">TẬN TÂM PHỤC VỤ</h2>
-              <p>
-                Phu Thê Wedding luôn sẵn sàng hỗ trợ khách hàng từ khâu chuẩn bị
-                đến ngày diễn ra sự kiện.
-              </p>
-            </div>
-          </div>
-          <div data-aos="fade-right" className="flex items-start gap-3">
-            <img src={camket} className="h-14 w-14 object-contain" />
-            <div className="flex flex-col rounded-3xl border-2 border-red-500 px-4 py-2">
-              <h2 className="text-xl font-bold">CHI PHÍ HỢP LÝ</h2>
-              <p>
-                Gói dịch vụ đa dạng, linh hoạt ngân sách, cam kết minh bạch
-                không phát sinh chi phí bất ngờ.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>

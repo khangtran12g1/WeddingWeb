@@ -23,6 +23,8 @@ import Login from "./Admin/pages/Login";
 import PrivateRoute from "./Admin/components/PrivateRoute";
 import UserAdmin from "./Admin/pages/UserAdmin";
 import HomeGioiThieu from "./Admin/pages/HomeGioiThieu";
+import HomeLiDo from "./Admin/pages/HomeLiDo";
+import HomeVideo from "./Admin/pages/HomeVideo";
 
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
           <Route path="OrderListAdmin" element={<PrivateRoute><OrderListAdmin /></PrivateRoute>} />
           <Route path="UserAdmin" element={<PrivateRoute><UserAdmin /></PrivateRoute>} />
           <Route path="HomeGioiThieu" element={<PrivateRoute><HomeGioiThieu /></PrivateRoute>} />
+          <Route path="HomeLiDo" element={<PrivateRoute><HomeLiDo /></PrivateRoute>} />
+          <Route path="HomeVideo" element={<PrivateRoute><HomeVideo /></PrivateRoute>} />
         </Route>
         <Route path="/Login" element={<Login />} />
       </Routes>
