@@ -9,6 +9,7 @@ import { FaTruckFast } from "react-icons/fa6";
 import { FaClipboardUser } from "react-icons/fa6";
 import { BsMenuButtonWide } from "react-icons/bs";
 import { AiFillDashboard } from "react-icons/ai";
+import { MdContactPhone } from "react-icons/md";
 
 
 
@@ -153,6 +154,17 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
                 (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
             >
               Nhân Viên
+            </span>
+            </Link>
+          </li>
+          <li className="hover:bg-gray-100 cursor-pointer rounded-md transition-all">
+            <Link to={"/admin/ContactAdmin"} className="flex items-center">
+            <span><MdContactPhone  size={25}/></span>
+            <span
+              className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
+                (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
+            >
+              Liên Hệ
             </span>
             </Link>
           </li>

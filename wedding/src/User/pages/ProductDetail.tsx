@@ -17,6 +17,7 @@ import {BASE_URL} from "../../../link"
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from 'axios';
+import toast from "react-hot-toast";
 
 export interface ProductImage {
   id: number;
@@ -71,6 +72,35 @@ function ProductDetail() {
     const increase = () => setQuantity((q) => q + 1);
     const decrease = () => setQuantity((q) => Math.max(1, q - 1));
 
+
+
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        try {
+            const res = await axios.post(`${BASE_URL}/lienHe/send`, { name: "Không", phone: phone, message: "Yêu cầu gọi lại" });
+
+            if (res.status === 200) {
+            toast.success("Gửi thành công");
+            setPhone("");
+            }
+        } catch (error) {
+            console.error("Lỗi gửi liên hệ:", error);
+            toast.error("Gửi không thành công");
+        }
+    };
+
+    const colors = [
+        { name: "Màu Đỏ", class: "bg-red-500" },
+        { name: "Màu Xanh Dương", class: "bg-blue-500" },
+        { name: "Màu Xanh Lá", class: "bg-green-500" },
+        { name: "Màu Vàng", class: "bg-yellow-400" },
+        { name: "Màu Tím", class: "bg-purple-500" },
+        { name: "Màu Cam", class: "bg-orange-500" },
+        { name: "Màu Hồng", class: "bg-pink-400" },
+        { name: "Màu Xám", class: "bg-gray-500" },
+    ];
+
   return (
     <>
       <div className="my-8 bg-white md:mx-24">
@@ -119,24 +149,29 @@ function ProductDetail() {
             </div>
             {/* Bên phải phần ảnh */}
           <div className="px-4 flex flex-col gap-4">
-            <h2 className="text-3xl  font-medium">{productDetail?.name}</h2>
-            <div className="flex text-2xl  font-medium">
+            <h2 className="xl:text-3xl text-xl font-medium">{productDetail?.name}</h2>
+            <div className="flex xl:text-2xl text-lg font-medium">
                 <h2 >Giá:&nbsp;</h2>
                 <h2 className=" text-red-600">{productDetail?.price} đ</h2>
             </div>
+            {productDetail?.category_name==="Dịch Vụ Cưới Hỏi" &&
             <div className="flex flex-col [&>h2]:text-lg font-medium gap-3">
                 <h2>CÁC TONE MÀU HIỆN CÓ:</h2>
-                <div className="flex text-xs text-center">
-                    <div className="flex flex-col border"style={{width:'10%'}}> 
-                        <div className="bg-red-500 h-16" ></div>
-                        <p className="text-xs">Màu Đỏ</p>
-                    </div>
-                    <div className="flex flex-col border"style={{width:'10%'}}> 
-                        <div className="bg-blue-500 h-16" ></div>
-                        <p>Màu xanh</p>
-                    </div>
-                </div>
+                <div className="grid grid-cols-8 sm:grid-cols-8 md:grid-cols-8 lg:grid-cols-8 xl:grid-cols-8 gap-4">
+  {colors.map((color, index) => (
+    <div
+      key={index}
+      className="flex flex-col items-center border rounded p-2"
+    >
+      <div className={`${color.class} w-full aspect-square rounded`}></div>
+      <p className="text-xs text-center mt-2">{color.name}</p>
+    </div>
+  ))}
+</div>
+
             </div>
+
+            }
             <div className="flex flex-col editor-output-category font-timesnewroman gap-4" 
                 dangerouslySetInnerHTML={{ __html: productDetail?.short_description ||"" }}>
             </div>
@@ -198,7 +233,7 @@ function ProductDetail() {
                         onChange={(values) => setPhone(values.target.value)}
                         placeholder="Số điện thoại cần tư vấn"
                         />
-                    <button className="text-white hover:text-black">Gửi</button>
+                    <button className="text-white hover:text-black" onClick={ handleSubmit}>Gửi</button>
                 </div>
             </div>
             <div className="flex items-center">

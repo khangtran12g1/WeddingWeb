@@ -1,18 +1,32 @@
 import React, { useState } from "react";
-
+import {BASE_URL} from "../../../link"
+import axios from "axios";
+import toast from "react-hot-toast";
 export default function LienHe() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSent(true);
-    setForm({ name: "", email: "", message: "" });
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const res = await axios.post(`${BASE_URL}/lienHe/send`, form);
+
+    if (res.status === 200) {
+      setSent(true);
+      setForm({ name: "", phone: "", message: "" });
+      toast.success("Gửi thành công");
+    }
+  } catch (error) {
+    console.error("Lỗi gửi liên hệ:", error);
+    toast.error("Gửi không thành công");
+  }
+};
+
 
   return (
     <div className="relative min-h-screen bg-white py-10 px-4 md:px-32">
@@ -65,11 +79,11 @@ export default function LienHe() {
               className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-red-400"
             />
             <input
-              name="email"
-              type="email"
+              name="phone"
+              type="number"
               required
-              placeholder="Email của bạn"
-              value={form.email}
+              placeholder="phone của bạn"
+              value={form.phone}
               onChange={handleChange}
               className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-red-400"
             />

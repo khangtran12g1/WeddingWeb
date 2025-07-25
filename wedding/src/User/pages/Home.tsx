@@ -179,7 +179,7 @@ function Home() {
           {cat.subcategories.map((sub)=> (
             <Link to={`/DanhSachSanPham?subcategoryId=${sub.id}&categoryId=${cat.id}`}>
               <div data-aos="fade-right" className="flex flex-col items-center justify-center gap-4" key={sub.id}>
-                <img className="w-full rounded-full border-4 border-yellow-300" src={sub.image} />
+                <img className="w-full aspect-[16/10] object-cover rounded-full border-4 border-yellow-300" src={sub.image} />
                 <h2 className="text-lg font-bold hover:text-red-600"> {sub.name} </h2>
               </div>
              </Link>

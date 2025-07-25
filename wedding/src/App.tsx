@@ -25,6 +25,7 @@ import UserAdmin from "./Admin/pages/UserAdmin";
 import HomeGioiThieu from "./Admin/pages/HomeGioiThieu";
 import HomeLiDo from "./Admin/pages/HomeLiDo";
 import HomeVideo from "./Admin/pages/HomeVideo";
+import ContactAdmin from "./Admin/pages/ContactAdmin";
 
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
           <Route path="HomeGioiThieu" element={<PrivateRoute><HomeGioiThieu /></PrivateRoute>} />
           <Route path="HomeLiDo" element={<PrivateRoute><HomeLiDo /></PrivateRoute>} />
           <Route path="HomeVideo" element={<PrivateRoute><HomeVideo /></PrivateRoute>} />
+          <Route path="ContactAdmin" element={<PrivateRoute><ContactAdmin /></PrivateRoute>} />
         </Route>
         <Route path="/Login" element={<Login />} />
       </Routes>

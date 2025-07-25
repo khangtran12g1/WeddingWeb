@@ -30,7 +30,7 @@ export interface CategoryWithSub {
 
 
 function Header() {
-  const [productName, setProductName] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const { cartItems,removeFromCart,updateQuantity } = useCart();
   const [categoryWithSub, setCategoryWithSub] = useState<CategoryWithSub[]>([]);
   useEffect(() => {
@@ -57,17 +57,17 @@ function Header() {
 
         <div>
           <div className="flex items-center justify-center space-x-2">
-            <div className="flex border-2 border-gray-300 px-3 rounded-lg items-center">
+            {/* <div className="flex border-2 border-gray-300 px-3 rounded-lg items-center">
               <input
                 type="text"
                 style={{width:100}}
-                value={productName}
-                onChange={(values) => setProductName(values.target.value)}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Tìm kiếm"
                 className="focus:outline-none"
               />
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
-            </div>
+            </div> */}
             
             <div
               className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-red-500 text-2xl"
