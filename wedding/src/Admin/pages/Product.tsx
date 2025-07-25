@@ -601,7 +601,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả</Label>
                 <Editor
-                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
+                    apiKey="mia9v15z0haplqqr2z5sfs498n4cbsd580bgnagfnpaayby0"
                     onInit={(_, editor) => (editorRef1.current = editor)}
                     init={{
                     height: 300,
@@ -624,7 +624,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả chi tiết</Label>
                 <Editor
-                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
+                    apiKey="mia9v15z0haplqqr2z5sfs498n4cbsd580bgnagfnpaayby0"
                     onInit={(_, editor) => (editorRef2.current = editor)}
                     init={{
                     height: 500,
@@ -808,7 +808,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả</Label>
                 <Editor
-                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
+                    apiKey="mia9v15z0haplqqr2z5sfs498n4cbsd580bgnagfnpaayby0"
                     onInit={(_, editor) => (editEditorRef1.current = editor)}
                     init={{
                     height: 300,
@@ -831,7 +831,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <div>
                 <Label>Mô tả chi tiết</Label>
                 <Editor
-                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
+                    apiKey="mia9v15z0haplqqr2z5sfs498n4cbsd580bgnagfnpaayby0"
                     onInit={(_, editor) => (editEditorRef2.current = editor)}
                     init={{
                     height: 500,

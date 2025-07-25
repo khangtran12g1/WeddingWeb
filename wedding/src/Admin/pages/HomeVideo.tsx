@@ -92,7 +92,7 @@ export default function HomeVideo(){
                    <Button variant={"destructive"} onClick={()=> handleSaveVideo()}> Lưu</Button>
                 </div>
                 <Editor
-                    apiKey="e84evq5hbqp4fw63bd77vkvip4r1ueoo7rjbv6nv59hdq8k4"
+                    apiKey="mia9v15z0haplqqr2z5sfs498n4cbsd580bgnagfnpaayby0"
                     onInit={(_, editor) => (editMota.current = editor)}
                     init={{
                     height: 500,
