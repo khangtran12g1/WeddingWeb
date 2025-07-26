@@ -15,6 +15,7 @@ const schema = `
   DROP TABLE IF EXISTS gioi_thieu;
   DROP TABLE IF EXISTS ly_do;
   DROP TABLE IF EXISTS video;
+  DROP TABLE IF EXISTS lien_he;
 
   CREATE TABLE categories (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -127,6 +128,16 @@ CREATE TABLE video (
     mo_ta TEXT NOT NULL,
     video_url VARCHAR(255)
 );
+
+CREATE TABLE lien_he (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ten VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    messenger TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    trang_thai ENUM('Chưa xử lý', 'Đã xử lý') DEFAULT 'Chưa xử lý'
+);
+
 
 `;
 

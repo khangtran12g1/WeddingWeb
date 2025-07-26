@@ -13,6 +13,7 @@ const vnpayRouter = require('./routes/vnpay');
 const albumImage = require('./routes/albumImage');
 const auth = require('./routes/auth');
 const homeUser = require('./routes/HomeUser');
+const lienHe = require('./routes/lienHe');
 
 const app = express();
 app.use(cors());
@@ -29,6 +30,7 @@ app.use('/vnpay', vnpayRouter);
 app.use('/album', albumImage);
 app.use('/auth', auth);
 app.use('/homeUser', homeUser);
+app.use('/lienHe', lienHe);
 
 
 

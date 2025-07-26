@@ -240,4 +240,140 @@ router.post('/updatePayment', async (req, res) => {
 });
 
 
+router.get("/getOrderStats", async (req, res) => {
+  try {
+    const db = await connectDB();
+
+    // 1. Lấy tổng số đơn hàng
+    const [[{ total }]] = await db.query(`
+      SELECT COUNT(*) AS total 
+      FROM orders 
+      WHERE status != 'cancelled'
+    `);
+
+    // 2. Lấy số lượng theo từng trạng thái
+    const [rows] = await db.query(`
+      SELECT 
+        status,
+        COUNT(*) AS count
+      FROM orders
+      WHERE status != 'cancelled'
+      GROUP BY status
+    `);
+
+
+    // 3. Tính phần trăm
+    const stats = rows.map((row) => ({
+      status: row.status,
+      count: row.count,
+      percentage: total === 0 ? 0 : Math.round((row.count / total) * 100),
+    }));
+    //4. lay tong tien don hang hoan thanh
+    const [[{ totalCompleted, price }]] = await db.query(`
+      SELECT 
+        COUNT(*) AS totalCompleted,
+        SUM(total_price) AS price
+      FROM orders
+      WHERE status = 'completed'
+    `);
+    await db.end();
+    res.json({
+      success: true,
+      data: {
+        total,
+        stats,
+        totalCompleted,
+        price:price || 0,
+      },
+    });
+  } catch (error) {
+    console.error("Lỗi khi lấy thống kê đơn hàng:", error);
+    res.status(500).json({ success: false, message: "Lỗi server khi lấy thống kê" });
+  }
+});
+
+router.get("/getOrderSummary", async (req, res) => {
+  try {
+    const db = await connectDB();
+
+    const [rows] = await db.query(`
+      SELECT 
+        order_code,
+        customer_name, 
+        total_price, 
+        status, 
+        created_at
+      FROM orders
+      ORDER BY created_at DESC
+    `);
+
+    await db.end();
+
+    res.json({
+      success: true,
+      data: rows,
+    });
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách tóm tắt đơn hàng:", error);
+    res.status(500).json({ success: false, message: "Lỗi server khi lấy đơn hàng" });
+  }
+});
+
+
+router.get("/getCategoryStats", async (req, res) => {
+  try {
+    const db = await connectDB();
+
+    // Tổng doanh thu từ đơn completed
+    const [[{ grandTotal }]] = await db.query(`
+      SELECT SUM(od.total) AS grandTotal
+      FROM orders o
+      JOIN order_details od ON o.id = od.order_id
+      WHERE o.status = 'completed'
+    `);
+
+    // Lấy thống kê tất cả category
+    const [rows] = await db.query(`
+      SELECT 
+        c.id,
+        c.name AS name,
+        COUNT(DISTINCT CASE WHEN o.status = 'completed' THEN o.id END) AS count,
+        SUM(CASE WHEN o.status = 'completed' THEN od.total ELSE 0 END) AS total
+      FROM categories c
+      LEFT JOIN subcategories s ON s.category_id = c.id
+      LEFT JOIN products p ON p.subcategory_id = s.id
+      LEFT JOIN order_details od ON od.product_id = p.id
+      LEFT JOIN orders o ON o.id = od.order_id
+      GROUP BY c.id
+    `);
+
+    const categoryStats = rows.map(row => ({
+      name: row.name,
+      count: row.count || 0,
+      total: row.total || 0,
+      percentage:
+        grandTotal === 0 ? 0 : Math.round(((row.total || 0) / grandTotal) * 100),
+    }));
+
+    await db.end();
+
+    res.json({
+      success: true,
+      data: categoryStats,
+    });
+  } catch (error) {
+    console.error("Lỗi khi lấy thống kê danh mục:", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server khi lấy thống kê danh mục",
+    });
+  }
+});
+
+
+
+
+
+
+
 module.exports = router;
