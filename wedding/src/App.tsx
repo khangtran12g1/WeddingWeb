@@ -20,12 +20,13 @@ import AboutAdmin from "./Admin/pages/About";
 import GalleryImagesAdmin from "./Admin/pages/GalleryImages";
 import OrderListAdmin from "./Admin/pages/OrderList";
 import Login from "./Admin/pages/Login";
-import PrivateRoute from "./Admin/components/PrivateRoute";
+import PrivateRoute from "./Admin/components/PrivateRoute ";
 import UserAdmin from "./Admin/pages/UserAdmin";
 import HomeGioiThieu from "./Admin/pages/HomeGioiThieu";
 import HomeLiDo from "./Admin/pages/HomeLiDo";
 import HomeVideo from "./Admin/pages/HomeVideo";
 import ContactAdmin from "./Admin/pages/ContactAdmin";
+import Unauthorized from "./Admin/pages/Unauthorized";
 
 
 function App() {
@@ -50,19 +51,22 @@ function App() {
 
 
         <Route path="/admin" element={<LayoutAdmin/>}>
-          <Route index element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
-          <Route path="ProductAdmin" element={<PrivateRoute><ProductAdmin /></PrivateRoute>} />
-          <Route path="CategoryAdmin" element={<PrivateRoute><CategoryAdmin /></PrivateRoute>} />
-          <Route path="AboutAdmin" element={<PrivateRoute><AboutAdmin /></PrivateRoute>} />
-          <Route path="GalleryImagesAdmin" element={<PrivateRoute><GalleryImagesAdmin /></PrivateRoute>} />
-          <Route path="OrderListAdmin" element={<PrivateRoute><OrderListAdmin /></PrivateRoute>} />
-          <Route path="UserAdmin" element={<PrivateRoute><UserAdmin /></PrivateRoute>} />
-          <Route path="HomeGioiThieu" element={<PrivateRoute><HomeGioiThieu /></PrivateRoute>} />
-          <Route path="HomeLiDo" element={<PrivateRoute><HomeLiDo /></PrivateRoute>} />
-          <Route path="HomeVideo" element={<PrivateRoute><HomeVideo /></PrivateRoute>} />
-          <Route path="ContactAdmin" element={<PrivateRoute><ContactAdmin /></PrivateRoute>} />
+          <Route index element={<PrivateRoute allowedRoles={["admin"]}> <Dashboard /></PrivateRoute>} />
+          <Route path="Dashboard" element={<PrivateRoute allowedRoles={["admin"]}><Dashboard /></PrivateRoute>} />
+          <Route path="ProductAdmin" element={<PrivateRoute allowedRoles={["admin", "staff"]}><ProductAdmin /></PrivateRoute>} />
+          <Route path="CategoryAdmin" element={<PrivateRoute allowedRoles={["admin", "staff"]}><CategoryAdmin /></PrivateRoute>} />
+          <Route path="AboutAdmin" element={<PrivateRoute allowedRoles={["admin", "staff"]}><AboutAdmin /></PrivateRoute>} />
+          <Route path="GalleryImagesAdmin" element={<PrivateRoute allowedRoles={["admin", "staff"]}><GalleryImagesAdmin /></PrivateRoute>} />
+          <Route path="OrderListAdmin" element={<PrivateRoute allowedRoles={["admin", "staff"]}><OrderListAdmin /></PrivateRoute>} />
+          <Route path="UserAdmin" element={<PrivateRoute allowedRoles={["admin"]}><UserAdmin /></PrivateRoute>} />
+          <Route path="HomeGioiThieu" element={<PrivateRoute allowedRoles={["admin", "staff"]}><HomeGioiThieu /></PrivateRoute>} />
+          <Route path="HomeLiDo" element={<PrivateRoute allowedRoles={["admin", "staff"]}><HomeLiDo /></PrivateRoute>} />
+          <Route path="HomeVideo" element={<PrivateRoute allowedRoles={["admin", "staff"]}><HomeVideo /></PrivateRoute>} />
+          <Route path="ContactAdmin" element={<PrivateRoute allowedRoles={["admin", "staff"]}><ContactAdmin /></PrivateRoute>} />
         </Route>
         <Route path="/Login" element={<Login />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
       </Routes>
     </Router>
   );

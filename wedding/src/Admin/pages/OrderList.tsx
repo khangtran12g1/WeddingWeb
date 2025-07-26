@@ -35,7 +35,7 @@ interface OrderDetail {
   total: number;
   product_image: string;
 }
-
+const role = localStorage.getItem("role");
 export default function OrderListAdmin() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -287,7 +287,7 @@ export default function OrderListAdmin() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto">
                     {editableDetails.map((item, idx) => (
                     <div key={idx} className="border border-gray-200 p-3 rounded-lg flex gap-4 items-center hover:bg-gray-50 transition-colors relative">
-                        <button className="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                        <button className={`absolute top-2 right-2 text-gray-400 hover:text-red-500 ${role==="staff" && "hidden"}`}
                             onClick={() => handleRemoveItem(idx)}>
                             <X className="w-5 h-5" />
                         </button>
@@ -301,12 +301,12 @@ export default function OrderListAdmin() {
                             <div className="flex justify-between mt-2 text-sm text-gray-600">
                               <span>Đơn giá: {item.product_price.toLocaleString()}đ</span>
                               <div className="flex items-center gap-2">
-                                <button className="w-6 h-6 flex items-center justify-center border rounded-md hover:bg-gray-100"
+                                <button className={`w-6 h-6 flex items-center justify-center border rounded-md hover:bg-gray-100 ${role==="staff" && "hidden"}`}
                                     onClick={() => handleQuantityChange(idx, -1)}>
                                     <Minus className="w-3 h-3" />
                                 </button>
                                 <span>{item.quantity}</span>
-                                <button className="w-6 h-6 flex items-center justify-center border rounded-md hover:bg-gray-100"
+                                <button className={`w-6 h-6 flex items-center justify-center border rounded-md hover:bg-gray-100 ${role==="staff" && "hidden"}`}
                                     onClick={() => handleQuantityChange(idx, 1)}>
                                     <Plus className="w-3 h-3" />
                                 </button>

@@ -20,7 +20,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: SidebarProps) {
-
+  const role = localStorage.getItem("role");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false);
 
@@ -47,14 +47,16 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
       </span>
 
       <ul className="space-y-2 font-timesnewroman [&>li]:p-2 [&>li]:text-lg">
-          <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all">
-            <span className="text-xl"><AiFillDashboard size={25}/></span>
-            <span
-              className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
-                (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
-            >
-              Dashboard
-            </span>
+          <li className={`hover:bg-gray-100 cursor-pointer rounded-md transition-all ${role==="staff" && "hidden"}`}>
+             <Link to={"/admin/Dashboard"} className="flex items-center">
+              <span className="text-xl"><AiFillDashboard size={25}/></span>
+              <span
+                className={"overflow-hidden whitespace-nowrap transition-all duration-300 "+
+                  (isCollapsed ? "w-0 opacity-0 group-hover:w-auto group-hover:opacity-100 pl-2" : "w-auto pl-2 opacity-100")}
+              >
+                Dashboard
+              </span>
+            </Link>
           </li>
           <li className="hover:bg-gray-100 cursor-pointer rounded-md flex items-center transition-all" onClick={() => setIsOpen1(!isOpen1)}>
             <span><BsMenuButtonWide size={25}/></span>
@@ -146,7 +148,7 @@ export default function Sidebar({isCollapsed,isMobileOpen,closeMobileSidebar,}: 
                   </Link>
               </ul>
             )}
-            <li className="hover:bg-gray-100 cursor-pointer rounded-md transition-all">
+            <li className={`hover:bg-gray-100 cursor-pointer rounded-md transition-all ${role==="staff" && "hidden"}`}>
             <Link to={"/admin/UserAdmin"} className="flex items-center">
             <span className="text-xl"><FaClipboardUser size={25}/></span>
             <span

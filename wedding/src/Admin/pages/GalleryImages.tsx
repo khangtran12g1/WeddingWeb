@@ -15,7 +15,7 @@ interface Gallery {
   name: string;
   images: string[];
 }
-
+const role = localStorage.getItem("role");
 export default function GalleryImages() {
   useEffect(() => {
       getListAlbums();
@@ -309,7 +309,7 @@ function GalleryCard({ gallery,onEdit,onDelete }: { gallery: Gallery; onEdit: ()
           ✏️ Sửa
         </button>
         <button
-          className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
+          className={`px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm ${role==="staff" && "hidden"}`}
           onClick={onDelete}
         >
           🗑️ Xoá

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../link";
 import { toast, Toaster } from "react-hot-toast";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +21,18 @@ export default function Login() {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", res.data.role);
         toast.success("Đăng nhập thành công!");
-        navigate("/admin");
+        if(res.data.role==="admin"){
+           setTimeout(() => {
+              window.location.href = "/admin";
+            }, 500);
+        }else {
+          setTimeout(() => {
+            window.location.href = "/admin/OrderListAdmin";
+            // navigate("/admin/OrderListAdmin");
+            // window.location.reload();
+          }, 500);
+        }
+          
       } else {
         toast.error(res.data.message || "Sai tài khoản hoặc mật khẩu");
       }

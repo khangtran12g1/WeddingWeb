@@ -298,7 +298,6 @@ const UserAdmin = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                 >
                     <option value="staff">Nhân viên</option>
-                    <option value="manager">Quản lý</option>
                     <option value="admin">Admin</option>
                 </select>
                 </div>
@@ -385,7 +384,6 @@ const UserAdmin = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                 >
                     <option value="staff">Nhân viên</option>
-                    <option value="manager">Quản lý</option>
                     <option value="admin">Admin</option>
                 </select>
                 </div>

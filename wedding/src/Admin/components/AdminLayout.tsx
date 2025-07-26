@@ -24,6 +24,7 @@ export default function LayoutAdmin() {
           <Header
             toggleSidebar={() => setIsCollapsed(!isCollapsed)}
             toggleMobileSidebar={() => setIsMobileOpen(true)}
+            isCollapsed={isCollapsed}
           />
         </div>
 

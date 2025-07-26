@@ -42,7 +42,9 @@ type Package = {
   subcategory_id: number;
   subcategory_name: string;
 };
+const role = localStorage.getItem("role");
 export default function Category() {
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubCategories] = useState<SubCategory[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
@@ -695,7 +697,7 @@ const deletePackage = async (id: number) => {
                         <td className="px-5 py-4">
                           <div className="flex gap-2">
                             <FiEdit size={20} onClick={()=> handleOpenEditCategory(item)}/>
-                            <RiDeleteBin6Line size={20} onClick={()=> deleteCategory(item.id)} />
+                            <RiDeleteBin6Line size={20} onClick={()=> deleteCategory(item.id)} className={`${role==="staff" && "hidden"}`}/>
                           </div>
                         </td>
                       </tr>
@@ -753,7 +755,7 @@ const deletePackage = async (id: number) => {
                               <FiEdit size={20} onClick={()=> handleOpenEditSubCategory(item)} />
                             </button>
                             <button
-                              className="text-red-600 hover:text-red-800 transition"
+                              className={`text-red-600 hover:text-red-800 transition ${role==="staff" && "hidden"}`}
                               title="Xoá"
                             >
                               <RiDeleteBin6Line size={20} onClick={()=> deleteSubCategory(item.id)} />
@@ -808,7 +810,7 @@ const deletePackage = async (id: number) => {
                               <FiEdit size={20} onClick={()=> handleOpenEditPackage(item)}/>
                             </button>
                             <button
-                              className="text-red-600 hover:text-red-800 transition"
+                              className={`text-red-600 hover:text-red-800 transition ${role==="staff" && "hidden"}`}
                               title="Xoá"
                             >
                               <RiDeleteBin6Line size={20} onClick={()=> deletePackage(item.id)}/>

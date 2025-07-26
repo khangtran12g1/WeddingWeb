@@ -3,8 +3,13 @@ import { LuSquareMenu } from "react-icons/lu";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Header({toggleSidebar,toggleMobileSidebar}: 
-                              {toggleSidebar: () => void; toggleMobileSidebar: () => void;}) {
+interface HeaderProps {
+  toggleSidebar: () => void;
+  toggleMobileSidebar: () => void;
+  isCollapsed: boolean;
+}
+
+export default function Header({toggleSidebar,toggleMobileSidebar,isCollapsed}:HeaderProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -20,7 +25,9 @@ export default function Header({toggleSidebar,toggleMobileSidebar}:
 
   return (
     
-    <div className="bg-white shadow px-4 py-7 flex items-center justify-between border">
+    <div className={"bg-white shadow px-4 py-7 flex items-center justify-between border" + 
+      (isCollapsed ? " h-3" : "h-20")
+    }>
       <button
         onClick={toggleSidebar}
         className="text-xl hidden md:block"
@@ -33,6 +40,8 @@ export default function Header({toggleSidebar,toggleMobileSidebar}:
       >
         <LuSquareMenu size={32} color="gray"/>
       </button>
+
+
       <div className="relative" ref={dropdownRef}>
       <div
         className="flex items-center gap-4 cursor-pointer"

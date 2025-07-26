@@ -69,7 +69,7 @@ export interface Product {
 
   images: string[];
 }
-
+const role = localStorage.getItem("role");
 
 export default function Product() {
 
@@ -986,7 +986,7 @@ const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                       </button>
                       <button 
                         onClick={()=> deleteProduct(item.id)}
-                        className="text-red-600 hover:text-red-900"
+                        className={`text-red-600 hover:text-red-900 ${role==="staff" && "hidden"}`}
                       >
                         <RiDeleteBin6Line size={18} />
                       </button>

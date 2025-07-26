@@ -19,6 +19,7 @@ interface Contact {
   created_at: string;
   trang_thai: string;
 }
+const role = localStorage.getItem("role");
 
 const ContactAdmin = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -130,10 +131,10 @@ const ContactAdmin = () => {
                 </td>
               <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                 {contact.trang_thai === "Chưa xử lý" ?
-                <button className="text-indigo-600 hover:text-indigo-900 mr-4" onClick={() => handleOpenProcessDialog(contact)}
+                <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleOpenProcessDialog(contact)}
                     >Xử Lý</button>
                 : 
-                <button className="text-red-600 hover:text-red-900" onClick={() => handleOpenDeleteDialog(contact)}
+                <button className={`text-red-600 hover:text-red-900 ${role==="staff" && "hidden"}`} onClick={() => handleOpenDeleteDialog(contact)}
                    >Xoá
                 </button>}
               </td>
